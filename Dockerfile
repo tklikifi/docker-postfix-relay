@@ -1,4 +1,9 @@
-FROM debian:9
+FROM alpine:latest
+
+LABEL maintainer="Tommi Linnakangas <tkl@iki.fi>"
+
+RUN apk add --update bash postfix rsyslog wget && \
+    rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
 
 VOLUME ["/var/log", "/var/spool/postfix"]
 EXPOSE 25
@@ -18,16 +23,6 @@ ENV HOST=localhost \
     MAIL_NON_CANONICAL_PREFIX='noreply+' \
     MAIL_NON_CANONICAL_DEFAULT='' \
     MESSAGE_SIZE_LIMIT=52428800
-
-RUN apt-get update && \
-    apt-get upgrade -yqq && \
-    echo "postfix postfix/mailname string $MAILNAME" | debconf-set-selections && \
-    echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections && \
-    apt-get install -yqq postfix rsyslog iproute2 wget && \
-    apt-get clean -yqq && \
-    apt-get autoclean -yqq && \
-    apt-get autoremove -yqq && \
-    rm -rf /var/cache/apt/archives/* /var/cache/apt/*.bin /var/lib/apt/lists/*
 
 ARG DUMB_INIT=1.2.1
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT}/dumb-init_${DUMB_INIT}_amd64 && \
