@@ -96,10 +96,7 @@ postfix set-permissions
 
 _log "Docker entrypoint configured"
 
-# Start syslog daemon
-/etc/init.d/rsyslog start
-
-# Start Postfix daemon
-/etc/init.d/postfix start
+# Restart Postfix daemon
+rc-service postfix restart
 
 $@ & wait ${!}

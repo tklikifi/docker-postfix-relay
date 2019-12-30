@@ -2,7 +2,7 @@ FROM alpine:latest
 
 LABEL maintainer="Tommi Linnakangas <tkl@iki.fi>"
 
-RUN apk add --update bash postfix rsyslog wget && \
+RUN apk add --update openrc bash postfix postfix-doc rsyslog wget && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
 
 VOLUME ["/var/log", "/var/spool/postfix"]
@@ -24,12 +24,8 @@ ENV HOST=localhost \
     MAIL_NON_CANONICAL_DEFAULT='' \
     MESSAGE_SIZE_LIMIT=52428800
 
-ARG DUMB_INIT=1.2.1
-RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT}/dumb-init_${DUMB_INIT}_aarch64 && \
-    chmod +x /usr/local/bin/dumb-init
-
 ADD postfix /etc/postfix
-ADD entrypoint sendmail_test /usr/local/bin/
+ADD dumb-init entrypoint sendmail_test /usr/local/bin/
 
 RUN chmod a+rx /usr/local/bin/* && \
     postconf -e inet_interfaces=all && \
