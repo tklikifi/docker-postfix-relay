@@ -25,7 +25,7 @@ ENV HOST=localhost \
     MESSAGE_SIZE_LIMIT=52428800
 
 ARG DUMB_INIT=1.2.1
-RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT}/dumb-init_${DUMB_INIT}_amd64 && \
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT}/dumb-init_${DUMB_INIT}_aarch64 && \
     chmod +x /usr/local/bin/dumb-init
 
 ADD postfix /etc/postfix
